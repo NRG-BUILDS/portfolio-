@@ -7,7 +7,7 @@ import Image from "next/image";
 //assets
 import myPic from '../public/assets/images/profile.jpg'
 import html from '../public/assets/icons/html.svg'
-import css from '../public/assets/icons/html.svg'
+import css from '../public/assets/icons/CSS3.png'
 import javascript from '../public/assets/icons/js-icon.png'
 import react from '../public/assets/icons/react.png'
 import next from '../public/assets/icons/next-js.svg'
@@ -70,7 +70,7 @@ const Home = () => {
           </div>
         </header>
 
-        <section className="my-16">
+        <section className="my-16" id="about">
           <div>
             <HeadTag number={'01'} title={'About Me'} />
           </div>
@@ -122,14 +122,14 @@ const Home = () => {
           
         </section>
 
-        <section className="my-20 w-full">
+        <section className="my-20 w-full" id="projects">
           <HeadTag number={'02'} title={'My Projects'} />
           <ProjectList />
         </section>
 
         <section>
           <HeadTag number={'03'} title={'Call me, Maybe?'} />
-          <div className="min-h-screen flex justify-center items-center text-center">
+          <div className="relative min-h-screen flex justify-center items-center text-center">
             <div>
               <h2 className="text-heroHead leading-none font-bold ">Let's build the <span className="colorWord">future together.</span></h2>
               <div className="text-center my-8 grid md:grid-cols-2 justify-center gap-4 max-w-lg mx-auto">
@@ -140,14 +140,29 @@ const Home = () => {
             </div>
             </div>
             
-            
+            <footer className="absolute bottom-0 text-center text-sm leading-relaxed">
+            <div className="relative flex py- justify-center items-center gap-x-8">
+                        <a
+                            href="https://linkedin.com/emmanuel_omolaju"
+                            className="hover:underline hover:-translate-y-2 hover:text-light transition my-5">
+                                <i className="fa fa-brands fa-linkedin-in text-3xl"></i>
+                        </a>
+                        <a
+                            href="https://twitter.com/nrg_build"
+                            className="hover:underline hover:-translate-y-2 hover:text-light transition my-5">
+                                <i className="fa-brands fa-twitter text-3xl"></i>
+                        </a>
+                        <a
+                            href="https://github.com/NRG-BUILDS"
+                            className="hover:underline hover:-translate-y-2 hover:text-light transition my-5">
+                                <i className="fa-brands fa-github text-3xl"></i>
+                        </a>
+                    </div>
+              <p className="my-2">Built by Emmanuel Omolaju, aka NRG</p>
+              <p className="my-2">Page design inspired by <a href="https://v4.brittanychiang.com/" className="text-light">Brittany Chiang</a></p>
+            </footer>
           </div>
         </section>
-
-        <footer className="text-center text-sm leading-relaxed">
-          <p className="my-2">Built by Emmanuel Omolaju, aka NRG</p>
-          <p className="my-2">Page design inspired by <a href="https://v4.brittanychiang.com/" className="text-light">Brittany Chiang</a></p>
-        </footer>
       </main>
     </>
     

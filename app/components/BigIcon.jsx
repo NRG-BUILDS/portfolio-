@@ -8,10 +8,9 @@ const BigIcon = ({src, name}) => {
                 height={60}
                 src={src}
                 alt={name}
-                className=" mx-auto my-4"/>
-            <div className="">
-                <span>{name}</span>
-            </div>
+                className=" mx-auto my-4"
+                title={name}/>
+            
         </div>
             );
 }

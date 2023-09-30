@@ -18,16 +18,16 @@ const Navbar = () => {
                     </div>
                     
                     <div className="hidden md:flex bg-deep py-3 px-5  items-center">
-                        <NavContent />
+                        <NavContent setIsOpen={setIsOpen}/>
                     </div>
                 </div>
             </div>
-            {isOpen && <div className="navSlide absolute md:hidden right-0 w-full transition bg-deep z-50 h-screen py-10 px-5  overflow-hidden grid items-center text-lg">
+            <div className={'transition-all duration-300 ease-in-out absolute md:hidden right-0 bg-deep z-50 h-screen py-10  overflow-hidden grid items-center text-lg ' + (isOpen ? 'w-full' : 'w-0')}>
                 <div className="h-1/2 grid items-center">
-                    <NavContent />
+                    <NavContent setIsOpen={setIsOpen}/>
                 </div>
                     
-            </div>}
+            </div>
         </nav>
         
         </>
@@ -36,16 +36,22 @@ const Navbar = () => {
  
 export default Navbar;
 
-const NavContent = () => {
+const NavContent = ({setIsOpen}) => {
     return ( 
         <>
-            <div className="text-light hover:bg-black md:inline-block mx-4">
-                <span>About</span>
-            </div>
-            <div className="text-light hover:bg-black md:inline-block mx-4">
-                <span>Projects</span>
-            </div>
-            <div className="text-light hover:bg-black md:inline-block mx-4">
+            <a href="#about" onClick={() => {setIsOpen(false)}}>
+                <div className="text-light hover:bg-black md:inline-block mx-4 py-6 md:py-0">
+                    <span>About</span>
+                </div>
+            </a>
+            <a href="#projects" onClick={() => {setIsOpen(false)}}>
+                <div className="text-light hover:bg-black md:inline-block mx-4 py-6 md:py-0">
+                    <span>Projects</span>
+                </div>
+            </a>
+            
+            
+            <div className="text-light hover:bg-black md:inline-block mx-4 py-6 md:py-0">
                 <a href="" download={true} className="px-3 py-3 hover:shadow border-2 border-light rounded">Resume</a>
                 
             </div>
