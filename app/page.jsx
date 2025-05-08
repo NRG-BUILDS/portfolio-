@@ -135,7 +135,7 @@ const Home = () => {
               <div className="text-center my-8 grid md:grid-cols-2 justify-center gap-4 max-w-lg mx-auto">
                 <a href="https://wa.me/2349079711780" download={true} className="p-3 bg-light border-2 border-light text-deep font-semibold rounded">Chat on Whatsapp</a>
                 <a
-                  href="/assets/docs/001 Emmanuel Omolaju.pdf" download={true}
+                  href="/assets/docs/001 Emmanuel Omolaju Frontend Developer.pdf" download={true}
                   className="p-3 text-light border-light border-2 font-semibold rounded">Get Resume</a>
             </div>
             </div>
