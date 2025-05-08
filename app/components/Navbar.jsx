@@ -52,7 +52,7 @@ const NavContent = ({setIsOpen}) => {
             
             
             <div className="text-light hover:bg-black md:inline-block mx-4 py-6 md:py-0">
-                <a href="" download={true} className="px-3 py-3 hover:shadow border-2 border-light rounded">Resume</a>
+                <a href="/assets/docs/001 Emmanuel Omolaju Frontend Developer.pdf" download={true} className="px-3 py-3 hover:shadow border-2 border-light rounded">Resume</a>
                 
             </div>
         </>
