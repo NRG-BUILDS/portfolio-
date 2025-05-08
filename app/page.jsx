@@ -63,7 +63,7 @@ const Home = () => {
             </motion.div>
 
             <div className="my-10">
-              <a href="/assets/docs/001 Emmanuel Omolaju.pdf" download={true} className="border-2 py-3 px-10 text-light rounded-md border-light">
+              <a href="/assets/docs/001 Emmanuel Omolaju Frontend Developer.pdf" download={true} className="border-2 py-3 px-10 text-light rounded-md border-light">
                 Get Resume
               </a>
             </div>
