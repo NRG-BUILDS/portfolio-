@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll-Linked Canvas Sequence | Apple AirPods Style</title>
+  
+  <!-- Modern Typography (Inter & SF Pro Display aesthetic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. CORE SYSTEM STYLES & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-color: #000000;
+      --card-bg: rgba(18, 18, 20, 0.65);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent-color: #0071e3;
+      --accent-gradient: linear-gradient(135deg, #0071e3, #42a5f5);
+      --text-main: #f5f5f7;
+      --text-muted: #86868b;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom Smooth Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050505;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2e;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3a40;
+    }
+
+    /* ==========================================================================
+       2. PRELOADER & LOADING FALLBACK STYLES
+       ========================================================================== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-content {
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+    }
+
+    .loader-logo {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+      background: linear-gradient(180deg, #ffffff 0%, #86868b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-gradient);
+      border-radius: 999px;
+      transition: width 0.15s ease-out;
+    }
+
+    .loader-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ==========================================================================
+       3. NAVIGATION HEADER
+       ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-brand {
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .nav-tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       4. HERO INTRO SECTION
+       ========================================================================== */
+    .hero-intro {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #0071e3;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 900px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 2.5rem;
+    }
+
+    .scroll-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-icon {
+      width: 24px;
+      height: 38px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .scroll-icon::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 8px;
+      background: var(--text-main);
+      border-radius: 2px;
+      animation: scrollWheel 1.5s infinite;
+    }
+
+    @keyframes scrollWheel {
+      0% { opacity: 1; top: 6px; }
+      100% { opacity: 0; top: 20px; }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+      60% { transform: translateY(-4px); }
+    }
+
+    /* ==========================================================================
+       5. PINNED CANVAS SEQUENCE CONTAINER & OVERLAYS
+       ========================================================================== */
+    #sequence-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    #frame-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    /* Floating Overlay Captions */
+    .overlay-caption {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 90%;
+      max-width: 650px;
+      pointer-events: none;
+      opacity: 0;
+      text-align: center;
+      transition: transform 0.4s ease-out;
+    }
+
+    .caption-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .caption-title {
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .caption-desc {
+      font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Floating UI Controls / Frame Counter Pill */
+    .sequence-hud {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(18, 18, 20, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .hud-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #34c759;
+      box-shadow: 0 0 10px rgba(52, 199, 89, 0.6);
+    }
+
+    .hud-frame-val {
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       6. POST-SEQUENCE FEATURE SHOWCASE & FOOTER
+       ========================================================================== */
+    .showcase-section {
+      padding: 8rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .showcase-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .showcase-header h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .showcase-header p {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 2.5rem;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: #050505;
+    }
+
+    /* Mobile Responsive Adjustments */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 1.25rem;
+      }
+      .caption-card {
+        padding: 1.75rem 1.25rem;
+        border-radius: 18px;
+      }
+      .sequence-hud {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. PRELOADER SCREEN -->
+  <div id="loader" aria-live="polite">
+    <div class="loader-content">
+      <div class="loader-logo">AirPods Pro</div>
+      <div class="progress-bar-track">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+      </div>
+      <div class="loader-status">
+        <span id="loader-text">Preloading frames...</span>
+        <span id="loader-percent">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. NAVBAR -->
+  <header class="navbar">
+    <div class="nav-brand">AirPods Studio</div>
+    <div class="nav-tag">180 FPS Canvas Sequence</div>
+  </header>
+
+  <!-- 3. HERO INTRO SECTION -->
+  <section class="hero-intro">
+    <div class="hero-eyebrow">Acoustic Engineering</div>
+    <h1 class="hero-title">Sound transformed. Scroll to reveal.</h1>
+    <p class="hero-subtitle">Experience high-fidelity audio engineered frame by frame on a ultra-crisp canvas sequence.</p>
+    <div class="scroll-prompt">
+      <div class="scroll-icon"></div>
+      <span>Scroll Down</span>
+    </div>
+  </section>
+
+  <!-- 4. PINNED CANVAS SEQUENCE SECTION -->
+  <section id="sequence-container">
+    <!-- Ultra HiDPI Canvas -->
+    <canvas id="frame-canvas"></canvas>
+
+    <!-- Floating Synchronized Captions -->
+    <div id="caption-1" class="overlay-caption">
+      <div class="caption-card">
+        <h2 class="caption-title">Spatial Audio</h2>
+        <p class="caption-desc">Dynamic head tracking places sound all around you for a theatre-like three-dimensional listening experience.</p>
+      </div>
+    </div>
+
+    <div id="caption-2" class="overlay-caption">
+      <div class="caption-card">
+        <h2 class="caption-title">Computational Audio</h2>
+        <p class="caption-desc">Custom-built drivers and H2 chips work in unison to eliminate distortion across every single frequency.</p>
+      </div>
+    </div>
+
+    <div id="caption-3" class="overlay-caption">
+      <div class="caption-card">
+        <h2 class="caption-title">Active Noise Cancellation</h2>
+        <p class="caption-desc">Up to 2x more active noise cancellation cancels unwanted noise before it ever reaches your ear canal.</p>
+      </div>
+    </div>
+
+    <div id="caption-4" class="overlay-caption">
+      <div class="caption-card">
+        <h2 class="caption-title">Iconic Architecture</h2>
+        <p class="caption-desc">From canopy to ear cushions, every detail is crafted for an uncompromising acoustic seal.</p>
+      </div>
+    </div>
+
+    <!-- HUD Indicator -->
+    <div class="sequence-hud">
+      <span class="hud-dot"></span>
+      <span>FRAME <span id="hud-frame" class="hud-frame-val">001</span> / 180</span>
+    </div>
+  </section>
+
+  <!-- 5. FEATURE SHOWCASE SECTION -->
+  <section class="showcase-section">
+    <div class="showcase-header">
+      <h2>Mastery in Motion</h2>
+      <p>Seamlessly integrated hardware, software, and real-time canvas animation.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <h3>GSAP ScrollTrigger</h3>
+        <p>Pins the viewport and scrubs through image frames with zero stutter, matching system scroll inertia perfectly.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <h3>Retina HiDPI Canvas</h3>
+        <p>Uses native device pixel scaling and proportional cover-fit algorithms to guarantee razor-sharp clarity on mobile and 4K displays.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🚀</span>
+        <h3>Smart Preloader</h3>
+        <p>Preloads all 180 sequence frames in parallel with instant frame-1 fallback so users never wait on a black screen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FOOTER -->
+  <footer>
+    <p>Built with GSAP ScrollTrigger & HTML5 Canvas • Single-File Drop-in Architecture</p>
+  </footer>
+
+  <!-- ==========================================================================
+     7. JAVASCRIPT ENGINE & CANVAS SCRUBBER
+     ========================================================================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Register GSAP ScrollTrigger plugin
+      gsap.registerPlugin(ScrollTrigger);
+
+      // --- CONFIGURATION ---
+      const TOTAL_FRAMES = 180;
+      const CANVAS_ID = "frame-canvas";
+      
+      // Helper function to format frame filename: ezgif-frame-001.jpg ... ezgif-frame-180.jpg
+      const getFrameUrl = (index) => {
+        const paddedIndex = String(index + 1).padStart(3, '0');
+        return `ezgif-frame-${paddedIndex}.jpg`;
+      };
+
+      // --- DOM ELEMENTS ---
+      const canvas = document.getElementById(CANVAS_ID);
+      const ctx = canvas.getContext("2d");
+      const loader = document.getElementById("loader");
+      const progressBar = document.getElementById("progress-bar");
+      const loaderPercent = document.getElementById("loader-percent");
+      const loaderText = document.getElementById("loader-text");
+      const hudFrame = document.getElementById("hud-frame");
+
+      // Captions array with frame trigger ranges [startFrame, peakFrame, endFrame]
+      const captions = [
+        { el: document.getElementById("caption-1"), start: 10, peak: 35, end: 50 },
+        { el: document.getElementById("caption-2"), start: 55, peak: 80, end: 95 },
+        { el: document.getElementById("caption-3"), start: 100, peak: 125, end: 140 },
+        { el: document.getElementById("caption-4"), start: 145, peak: 165, end: 178 }
+      ];
+
+      // Array to store preloaded Image objects
+      const images = [];
+      let loadedCount = 0;
+      let isFirstFrameDrawn = false;
+
+      // Sequence state object for GSAP tweening
+      const sequenceState = { frame: 0 };
+
+      /* ==========================================================================
+         CANVAS RESIZE & COVER MATH (HiDPI SHARPNESS & MOBILTY CENTERING)
+         ========================================================================== */
+      function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Set high resolution canvas buffer size
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+
+        // Set CSS display size
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        // Render current frame after resize
+        renderFrame(Math.round(sequenceState.frame));
+      }
+
+      function drawImageCover(img) {
+        if (!img || !img.complete || img.naturalWidth === 0) return;
+
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+
+        // Calculate aspect ratio cover scale
+        const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
+        const drawWidth = imgWidth * scale;
+        const drawHeight = imgHeight * scale;
+
+        // Center position on canvas
+        const offsetX = (canvasWidth - drawWidth) / 2;
+        const offsetY = (canvasHeight - drawHeight) / 2;
+
+        // Enable high quality image rendering
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        // Clear and draw frame
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+      }
+
+      function renderFrame(index) {
+        const clampedIndex = Math.min(TOTAL_FRAMES - 1, Math.max(0, index));
+        const img = images[clampedIndex];
+        
+        if (img && img.complete) {
+          drawImageCover(img);
+        }
+
+        // Update HUD display
+        if (hudFrame) {
+          hudFrame.textContent = String(clampedIndex + 1).padStart(3, '0');
+        }
+
+        // Update floating caption opacity based on scroll range
+        captions.forEach(c => {
+          if (clampedIndex >= c.start && clampedIndex <= c.end) {
+            let opacity = 0;
+            if (clampedIndex <= c.peak) {
+              opacity = (clampedIndex - c.start) / (c.peak - c.start);
+            } else {
+              opacity = (c.end - clampedIndex) / (c.end - c.peak);
+            }
+            opacity = Math.max(0, Math.min(1, opacity));
+            c.el.style.opacity = opacity;
+            c.el.style.transform = `translate(-50%, -50%) translateY(${(1 - opacity) * 20}px)`;
+          } else {
+            c.el.style.opacity = 0;
+          }
+        });
+      }
+
+      /* ==========================================================================
+         GSAP SCROLLTRIGGER TIMELINE INITIALIZATION
+         ========================================================================== */
+      function initScrollSequence() {
+        // Timeline linked to scroll position
+        gsap.to(sequenceState, {
+          frame: TOTAL_FRAMES - 1,
+          snap: "frame",
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#sequence-container",
+            start: "top top",
+            end: "+=4000px", // Total scroll distance (tune for faster/slower pacing)
+            scrub: 0.6,     // Smooth inertia scrubbing to eliminate jitter
+            pin: true,       // Pin canvas during animation
+            anticipatePin: 1,
+            onUpdate: (self) => {
+              renderFrame(Math.round(sequenceState.frame));
+            }
+          }
+        });
+
+        // Window resize event listener with ScrollTrigger refresh
+        window.addEventListener("resize", () => {
+          resizeCanvas();
+          ScrollTrigger.refresh();
+        });
+
+        // Initial sizing & render
+        resizeCanvas();
+      }
+
+      /* ==========================================================================
+         PRELOADER & IMAGE LOADER WITH GRACEFUL FALLBACK
+         ========================================================================== */
+      function preloadImages() {
+        resizeCanvas(); // Set canvas dimensions ready for initial frame
+
+        for (let i = 0; i < TOTAL_FRAMES; i++) {
+          const img = new Image();
+          img.src = getFrameUrl(i);
+
+          img.onload = () => {
+            loadedCount++;
+            const percent = Math.floor((loadedCount / TOTAL_FRAMES) * 100);
+
+            // Update UI Preloader
+            if (progressBar) progressBar.style.width = `${percent}%`;
+            if (loaderPercent) loaderPercent.textContent = `${percent}%`;
+
+            // Graceful Fallback: Draw Frame 001 as soon as it's ready!
+            if (i === 0 && !isFirstFrameDrawn) {
+              isFirstFrameDrawn = true;
+              renderFrame(0);
+            }
+
+            // Once 100% loaded (or all frames processed)
+            if (loadedCount === TOTAL_FRAMES) {
+              onAllFramesLoaded();
+            }
+          };
+
+          img.onerror = () => {
+            console.warn(`[Frame Preloader] Error loading frame ${i + 1}`);
+            loadedCount++;
+            if (loadedCount === TOTAL_FRAMES) {
+              onAllFramesLoaded();
+            }
+          };
+
+          images.push(img);
+        }
+      }
+
+      function onAllFramesLoaded() {
+        if (loaderText) loaderText.textContent = "Complete!";
+        
+        // Hide preloader with smooth fade out
+        setTimeout(() => {
+          if (loader) loader.classList.add("hidden");
+          // Initialize GSAP sequence
+          initScrollSequence();
+        }, 300);
+      }
+
+      // Start preloading images immediately
+      preloadImages();
+    });
+  </script>
+</body>
+</html>
