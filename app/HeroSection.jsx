@@ -22,6 +22,8 @@ export default function AirPodsSequence({
   const [isLoading, setIsLoading] = useState(true);
   const [currentFrame, setCurrentFrame] = useState(1);
   const imagesRef = useRef([]);
+  const activeFrameRef = useRef(0);
+  const lastDrawnFrameRef = useRef(-1);
 
   // Helper: Generate image URL path (offset so index 0 → file 061)
   const getFrameUrl = (index) => {
@@ -32,60 +34,74 @@ export default function AirPodsSequence({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     let isFirstFrameDrawn = false;
     let loadedCount = 0;
+    let animFrameId = null;
 
-    // Helper: Draw image with HiDPI resolution & aspect ratio cover math
+    // Cache canvas metrics to avoid DOM reads during render loop
+    let cachedWidth = 0;
+    let cachedHeight = 0;
+    let cachedDpr = 1;
+
+    const updateCanvasBounds = () => {
+      cachedDpr = window.devicePixelRatio || 1;
+      cachedWidth = window.innerWidth;
+      cachedHeight = window.innerHeight;
+
+      canvas.width = cachedWidth * cachedDpr;
+      canvas.height = cachedHeight * cachedDpr;
+      canvas.style.width = `${cachedWidth}px`;
+      canvas.style.height = `${cachedHeight}px`;
+    };
+
+    updateCanvasBounds();
+
+    // Helper: Draw image with aspect ratio cover math
     const drawImageCover = (img) => {
       if (!img || !img.complete || img.naturalWidth === 0) return;
-
-      const dpr = window.devicePixelRatio || 1;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-      }
 
       const imgWidth = img.naturalWidth;
       const imgHeight = img.naturalHeight;
 
-      const scale = Math.max(
-        (width * dpr) / imgWidth,
-        (height * dpr) / imgHeight,
-      );
+      const targetW = cachedWidth * cachedDpr;
+      const targetH = cachedHeight * cachedDpr;
+
+      const scale = Math.max(targetW / imgWidth, targetH / imgHeight);
       const drawWidth = imgWidth * scale;
       const drawHeight = imgHeight * scale;
 
-      const offsetX = (width * dpr - drawWidth) / 2;
-      const offsetY = (height * dpr - drawHeight) / 2;
+      const offsetX = (targetW - drawWidth) / 2;
+      const offsetY = (targetH - drawHeight) / 2;
 
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.clearRect(0, 0, width * dpr, height * dpr);
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
-    const renderFrame = (index) => {
-      const clamped = Math.min(frameCount - 1, Math.max(0, index));
-      setCurrentFrame(clamped + 1);
-      const img = imagesRef.current[clamped];
-      if (img && img.complete) {
-        drawImageCover(img);
+    // Continuous 60fps render loop
+    const tick = () => {
+      const targetIdx = Math.min(
+        frameCount - 1,
+        Math.max(0, Math.round(activeFrameRef.current))
+      );
+
+      if (targetIdx !== lastDrawnFrameRef.current) {
+        lastDrawnFrameRef.current = targetIdx;
+        const img = imagesRef.current[targetIdx];
+        if (img && img.complete) {
+          drawImageCover(img);
+        }
       }
+
+      animFrameId = requestAnimationFrame(tick);
     };
 
-    // Preload images
+    // Preload & pre-decode images to eliminate GPU decode stutter
     const loadedImages = [];
     for (let i = 0; i < frameCount; i++) {
       const img = new Image();
       img.src = getFrameUrl(i);
 
-      img.onload = () => {
+      const checkComplete = () => {
         loadedCount++;
         const pct = Math.floor((loadedCount / frameCount) * 100);
         setProgress(pct);
@@ -100,11 +116,16 @@ export default function AirPodsSequence({
         }
       };
 
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === frameCount) {
-          setIsLoading(false);
+      img.onload = () => {
+        if (img.decode) {
+          img.decode().then(checkComplete).catch(checkComplete);
+        } else {
+          checkComplete();
         }
+      };
+
+      img.onerror = () => {
+        checkComplete();
       };
 
       loadedImages.push(img);
@@ -112,34 +133,47 @@ export default function AirPodsSequence({
     imagesRef.current = loadedImages;
 
     const handleResize = () => {
-      const img = imagesRef.current[currentFrame - 1] || imagesRef.current[0];
+      updateCanvasBounds();
+      const currentIdx = Math.min(
+        frameCount - 1,
+        Math.max(0, Math.round(activeFrameRef.current))
+      );
+      const img = imagesRef.current[currentIdx] || imagesRef.current[0];
       if (img) drawImageCover(img);
     };
 
     window.addEventListener("resize", handleResize);
+    animFrameId = requestAnimationFrame(tick);
 
-    // GSAP ScrollTrigger
+    // GSAP ScrollTrigger sequence
     const sequenceState = { frame: 0 };
+    let lastReactFrame = -1;
+
     const ctxGSAP = gsap.context(() => {
       gsap.to(sequenceState, {
         frame: frameCount - 1,
-        snap: "frame",
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "+=2400px",
-          scrub: 0.6,
+          scrub: 0.4,
           pin: true,
           anticipatePin: 1,
           onUpdate: () => {
-            renderFrame(Math.round(sequenceState.frame));
+            activeFrameRef.current = sequenceState.frame;
+            const currentInt = Math.round(sequenceState.frame) + 1;
+            if (currentInt !== lastReactFrame) {
+              lastReactFrame = currentInt;
+              setCurrentFrame(currentInt);
+            }
           },
         },
       });
     }, containerRef);
 
     return () => {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
       window.removeEventListener("resize", handleResize);
       ctxGSAP.revert();
     };
