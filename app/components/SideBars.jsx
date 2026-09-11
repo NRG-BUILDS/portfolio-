@@ -46,7 +46,7 @@ const SideBars = () => {
         <div>
           <div className="relative flex flex-col items-center gap-4">
             <a
-              href="https://linkedin.com/emmanuel_omolaju"
+              href="https://www.linkedin.com/in/emmanuel-omolaju-747708248/"
               className="hover:underline hover:-translate-y-2 hover:text-light transition my-5"
             >
               <i className="fa fa-brands fa-linkedin-in text-3xl"></i>
@@ -71,4 +71,4 @@ const SideBars = () => {
   );
 };
 
-export default SideBars;
+export default SideBars;

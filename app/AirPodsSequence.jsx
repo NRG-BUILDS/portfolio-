@@ -296,7 +296,7 @@ export default function AirPodsSequence({
 function CaptionCard({ topTag, active, title, description, cta }) {
   return (
     <div
-      className={`absolute bottom-20 xl:left-6 lg:top-1/2 lg:-translate-y-1/2 z-10 w-full max-w-3xl p-4 xl:mx-32 transition-all duration-500 pointer-events-none ${
+      className={`absolute bottom-20 lg:left-24 lg:top-1/2 lg:-translate-y-1/2 z-10 w-full max-w-3xl p-4  transition-all duration-500 pointer-events-none ${
         active
           ? "opacity-100 translate-y-0 scale-100 blur-none"
           : "opacity-0 translate-y-4 scale-95 blur-md"

@@ -3,9 +3,29 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-deep text-primary;
+html {
+  scroll-behavior: smooth;
 }
+
+body {
+  @apply bg-deep text-primary overflow-x-hidden selection:bg-light selection:text-deep;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #061e16;
+}
+::-webkit-scrollbar-thumb {
+  background: #195b45;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b1ff64;
+}
+
 .colorWord { 
   background-clip: text;
   -webkit-background-clip: text;
@@ -14,14 +34,47 @@ body {
   animation: variableColor 2.5s infinite alternate;
   -webkit-text-fill-color: transparent;
 }
+
+.glow-word {
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(135deg, #b1ff64 0%, #07b4d6 50%, #a955f5 100%);
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card {
+  background: rgba(19, 68, 51, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(177, 255, 100, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(177, 255, 100, 0.4);
+  box-shadow: 0 12px 40px 0 rgba(177, 255, 100, 0.15), 0 0 20px rgba(7, 180, 214, 0.1);
+  transform: translateY(-4px);
+}
+
 .navSlide {
   animation: navSlide 0.6s ease-in-out;
 }
+
 @keyframes variableColor { 
   0% { background-position: 0%}
   100% { background-position:100%;}
 }
+
 @keyframes navSlide { 
   0% { width: 0%}
   100% { width:100%;}
 }
+
+/* Perspective container for 3D tilt effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
