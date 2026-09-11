@@ -4,110 +4,46 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 
-// Pre-existing asset icons
-import javascript from "../../public/assets/icons/js-icon.png";
+// Official asset logos from public/assets/icons/
+import typescript from "../../public/assets/icons/Typescript_logo_2020.svg.webp";
 import react from "../../public/assets/icons/react.png";
 import next from "../../public/assets/icons/next-js.svg";
+import express from "../../public/assets/icons/express-109.svg";
+import javascript from "../../public/assets/icons/js-icon.png";
 import tailwind from "../../public/assets/icons/tailwindcss.svg";
+import expo from "../../public/assets/icons/expo_logo_icon_145293.webp";
+import figma from "../../public/assets/icons/Figma-logo.svg.webp";
+import claude from "../../public/assets/icons/Claude_AI_symbol.svg.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom SVG Icons for technologies without local static images
-const CustomIcon = ({ type }) => {
-  switch (type) {
-    case "typescript":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full">
-          <rect width="128" height="128" rx="16" fill="#3178C6" />
-          <path
-            fill="#FFFFFF"
-            d="M59.62 107.82c-4.4-2.8-6.5-7.4-6.5-13.8V40h16v50.9c0 3.2 1.1 4.8 3.3 4.8 1.4 0 3-.7 4.8-2.1l4 9.6c-4.1 3.2-8.8 4.8-14.1 4.8-2.7 0-5.2-.1-7.5-.2zm33.15.2c-7.9 0-14-2.2-18.4-6.7s-6.6-10.4-6.6-17.7h15.2c.4 4 1.7 7 3.8 8.8 2.1 1.8 5 2.7 8.7 2.7 3.3 0 5.8-.7 7.5-2.1 1.7-1.4 2.6-3.3 2.6-5.7 0-2.3-1.1-4.2-3.3-5.7-2.2-1.5-6.2-2.9-12-4.4-8.1-2.1-14-4.7-17.6-7.8-3.6-3.1-5.4-7.4-5.4-12.9 0-6.1 2.3-10.9 7-14.4 4.7-3.5 10.9-5.3 18.7-5.3 7.5 0 13.5 1.7 18 5.2 4.5 3.5 6.9 8.2 7.2 14.3H119c-.3-3.1-1.6-5.7-3.9-7.8-2.3-2.1-5.7-3.1-10.2-3.1-3.1 0-5.6.7-7.4 2.1-1.8 1.4-2.7 3.2-2.7 5.4 0 2.1 1.1 3.8 3.3 5.1 2.2 1.3 6.1 2.6 11.7 4 8.2 2.1 14.1 4.8 17.7 8.1 3.6 3.3 5.4 7.6 5.4 13.1 0 6.4-2.4 11.4-7.2 15-4.8 3.7-11.4 5.5-19.8 5.5z"
-          />
-        </svg>
-      );
-    case "nodejs":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full">
-          <path
-            fill="#5FA04E"
-            d="M64 8.5L14.7 37v57L64 121.5l49.3-28.5V37L64 8.5zm0 18.2l33.8 19.5v39.1L64 104.8 30.2 85.3V46.2L64 26.7z"
-          />
-          <path
-            fill="#5FA04E"
-            d="M64 45.4c-10.2 0-18.5 8.3-18.5 18.5S53.8 82.4 64 82.4s18.5-8.3 18.5-18.5S74.2 45.4 64 45.4zm0 28c-5.2 0-9.5-4.3-9.5-9.5s4.3-9.5 9.5-9.5 9.5 4.3 9.5 9.5-4.3 9.5-9.5 9.5z"
-          />
-        </svg>
-      );
-    case "express":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full">
-          <text
-            x="64"
-            y="76"
-            fontSize="52"
-            fontWeight="bold"
-            fontFamily="monospace"
-            fill="#E7FEF6"
-            textAnchor="middle"
-          >
-            ex
-          </text>
-          <circle
-            cx="64"
-            cy="64"
-            r="56"
-            fill="none"
-            stroke="#B1FF64"
-            strokeWidth="6"
-            strokeDasharray="12 6"
-          />
-        </svg>
-      );
-    case "expo":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full" fill="#E7FEF6">
-          <path d="M64 16L12 112h24l28-64 28 64h24L64 16z" />
-          <circle cx="64" cy="96" r="8" fill="#B1FF64" />
-        </svg>
-      );
-    case "figma":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full">
-          <path fill="#F24E1E" d="M42 106c12.1 0 22-9.9 22-22V62H42c-12.1 0-22 9.9-22 22s9.9 22 22 22z" />
-          <path fill="#A259FF" d="M20 40c0-12.1 9.9-22 22-22h22v44H42c-12.1 0-22-9.9-22-22z" />
-          <path fill="#F24E1E" d="M64 18h22c12.1 0 22 9.9 22 22s-9.9 22-22 22H64V18z" />
-          <path fill="#1ABCFE" d="M108 84c0 12.1-9.9 22-22 22s-22-9.9-22-22 9.9-22 22-22 22 9.9 22 22z" />
-          <path fill="#0ACF83" d="M42 62h22v22H42c-12.1 0-22-9.9-22-22s9.9-22 22-22z" />
-        </svg>
-      );
-    case "claude":
-      return (
-        <svg viewBox="0 0 128 128" className="w-full h-full">
-          <circle cx="64" cy="64" r="56" fill="#D97757" />
-          <path
-            fill="#FFF"
-            d="M64 24l10 26 26 10-26 10-10 26-10-26-26-10 26-10z"
-          />
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
+// Custom SVG Icon for Node.js
+const NodeJsIcon = () => (
+  <svg viewBox="0 0 128 128" className="w-full h-full">
+    <path
+      fill="#5FA04E"
+      d="M64 8.5L14.7 37v57L64 121.5l49.3-28.5V37L64 8.5zm0 18.2l33.8 19.5v39.1L64 104.8 30.2 85.3V46.2L64 26.7z"
+    />
+    <path
+      fill="#5FA04E"
+      d="M64 45.4c-10.2 0-18.5 8.3-18.5 18.5S53.8 82.4 64 82.4s18.5-8.3 18.5-18.5S74.2 45.4 64 45.4zm0 28c-5.2 0-9.5-4.3-9.5-9.5s4.3-9.5 9.5-9.5 9.5 4.3 9.5 9.5-4.3 9.5-9.5 9.5z"
+    />
+  </svg>
+);
 
 // Recruiter-Prioritized Tech Stack Array
 const techItems = [
-  { name: "TypeScript", iconType: "typescript", category: "Language", priority: 1 },
+  { name: "TypeScript", src: typescript, category: "Language", priority: 1 },
   { name: "React", src: react, category: "Frontend", priority: 2 },
   { name: "Next.js", src: next, category: "Full-Stack", priority: 3 },
-  { name: "Node.js", iconType: "nodejs", category: "Backend", priority: 4 },
-  { name: "Express", iconType: "express", category: "Backend", priority: 5 },
+  { name: "Node.js", customIcon: <NodeJsIcon />, category: "Backend", priority: 4 },
+  { name: "Express", src: express, category: "Backend", priority: 5 },
   { name: "JavaScript", src: javascript, category: "Language", priority: 6 },
   { name: "Tailwind CSS", src: tailwind, category: "Styling", priority: 7 },
-  // Extended Mobile Items (Shown on expansion or desktop)
-  { name: "Expo", iconType: "expo", category: "Mobile Dev", priority: 8 },
-  { name: "Figma", iconType: "figma", category: "UI/UX Design", priority: 9 },
-  { name: "Claude AI", iconType: "claude", category: "AI Workflow", priority: 10 },
+  // Extended Items (Shown on mobile toggle or desktop)
+  { name: "Expo", src: expo, category: "Mobile Dev", priority: 8 },
+  { name: "Figma", src: figma, category: "UI/UX Design", priority: 9 },
+  { name: "Claude AI", src: claude, category: "AI Workflow", priority: 10 },
 ];
 
 const TechStackSection = () => {
@@ -187,7 +123,7 @@ const TechStackSection = () => {
                     className="object-contain filter drop-shadow-md"
                   />
                 ) : (
-                  <CustomIcon type={tech.iconType} />
+                  tech.customIcon
                 )}
               </div>
               <div className="mt-2 w-full">

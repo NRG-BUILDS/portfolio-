@@ -188,7 +188,7 @@ export default function AirPodsSequence({
           topTag={
             <>
               <p className="text-light text-sm md:text-base mb-2">
-                Hi future team, I&apos;m
+                Hello world, I&apos;m
               </p>
             </>
           }
@@ -200,9 +200,7 @@ export default function AirPodsSequence({
           }
           description={
             <>
-              I am a <span className="text-light">Front-end Web Developer</span>
-              . I specialize in creating visually stunning websites that are
-              both user-friendly and efficient.
+              Fullstack Developer and <span className="text-light">Interactive UI Specialist</span> crafting high-performance web and mobile experiences with speed and precision.
             </>
           }
         />
@@ -211,22 +209,22 @@ export default function AirPodsSequence({
           active={currentFrame >= 37 && currentFrame <= 63}
           title={
             <>
-              I bring your ideas to <span className="colorWord">life</span>
+              Engineering Vision into <span className="colorWord">Motion</span>
             </>
           }
-          description="Interactive Motion & UI. Crafting smooth 60fps animations with GSAP ScrollTrigger, HTML5 Canvas, Framer Motion, and Tailwind CSS."
+          description="Building immersive 60fps web applications using GSAP ScrollTrigger, HTML5 Canvas, React, and modern UI architecture."
         />
 
         <CaptionCard
           active={currentFrame >= 67 && currentFrame <= 93}
-          title="Modern Tech Stack"
-          description="Proficient in React, Next.js, Typescript, JavaScript (ES6+), NodeJS, Express, HTML5, CSS3, Tailwind, and scalable web architecture."
+          title="Scalable Modern Ecosystems"
+          description="Architecting robust end to end products with React, Next.js, TypeScript, Node.js, Express, and Expo."
         />
 
         <CaptionCard
           active={currentFrame >= 97 && currentFrame <= 118}
-          title="Driven & Results-Oriented"
-          description="Committed to delivering clean, maintainable code and bringing energy (NRG) to every project."
+          title="Driven by Energy and Execution"
+          description="Delivering clean maintainable solutions that turn bold concepts into reality. Scroll down to discover my journey."
           cta={
             <>
               <motion.div
@@ -240,7 +238,7 @@ export default function AirPodsSequence({
                 <a
                   href="/assets/docs/001 Emmanuel Omolaju CV.pdf"
                   download={true}
-                  className="inline-block border-2 py-3 px-10 text-light rounded-md border-light hover:bg-light hover:text-deep transition-colors duration-300"
+                  className="inline-block border-2 py-3 px-10 text-light rounded-md border-light hover:bg-light hover:text-deep transition-colors duration-300 pointer-events-auto"
                 >
                   Get Resume
                 </a>

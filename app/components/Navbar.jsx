@@ -72,6 +72,16 @@ const NavContent = ({ setIsOpen }) => {
         </div>
       </a>
       <a
+        href="#experience"
+        onClick={() => {
+          setIsOpen(false);
+        }}
+      >
+        <div className="text-light hover:bg-black md:inline-block mx-4 py-6 md:py-0">
+          <span>Experience</span>
+        </div>
+      </a>
+      <a
         href="#projects"
         onClick={() => {
           setIsOpen(false);

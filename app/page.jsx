@@ -2,9 +2,10 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import SideBars from "./components/SideBars";
-import AirPodsSequence from "./AirPodsSequence";
+import AirPodsSequence from "./HeroSection";
 import AboutSection from "./components/AboutSection";
 import TechStackSection from "./components/TechStackSection";
+import ExperienceSection from "./components/ExperienceSection";
 import ProjectList from "./components/ProjectList";
 import ContactSection from "./components/ContactSection";
 import HeadTag from "./components/HeadTag";
@@ -36,13 +37,16 @@ const Home = () => {
         {/* Section Tech Stack */}
         <TechStackSection />
 
-        {/* Section 02: Projects */}
+        {/* Section 02: Work Experience */}
+        <ExperienceSection />
+
+        {/* Section 03: Projects */}
         <section className="my-24 w-full" id="projects">
-          <HeadTag number="02" title="My Projects" />
+          <HeadTag number="03" title="My Projects" />
           <ProjectList />
         </section>
 
-        {/* Section 03: Contact & Footer */}
+        {/* Section 04: Contact & Footer */}
         <ContactSection />
       </main>
     </>

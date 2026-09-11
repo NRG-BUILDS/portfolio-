@@ -60,7 +60,7 @@ const ContactSection = () => {
 
   return (
     <section ref={containerRef} className="my-20 relative" id="contact">
-      <HeadTag number="03" title="Call me, Maybe?" />
+      <HeadTag number="04" title="Call me, Maybe?" />
 
       <div className="min-h-[70vh] flex flex-col justify-between items-center text-center py-12 relative overflow-hidden">
         {/* Glow backdrop blob */}
