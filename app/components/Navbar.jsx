@@ -1,6 +1,8 @@
 "use client";
 import { Squeeze as Hamburger } from "hamburger-react";
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import nrgLogo from "../../public/assets/icons/NRG Lime.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +30,16 @@ const Navbar = () => {
       >
         <div className=" flex justify-between p-4 items-center shadow-lg md:shadow-none text-light">
           <div>
-            <h1 className="font-bold">NRG</h1>
+            <a href="#" className="flex items-center group">
+              <Image
+                src={nrgLogo}
+                alt="NRG Logo"
+                width={44}
+                height={44}
+                className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                priority
+              />
+            </a>
           </div>
 
           <div>

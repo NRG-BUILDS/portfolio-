@@ -2,6 +2,8 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+import nrgLogo from "../../public/assets/icons/NRG Lime.png";
 import HeadTag from "./HeadTag";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -111,7 +113,7 @@ const ContactSection = () => {
         </div>
 
         {/* Footer Links & Credits */}
-        <footer className="w-full pt-12 z-10 border-t border-light/10 mt-16">
+        <footer className="w-full pt-12 z-10 border-t border-light/10 mt-16 flex flex-col items-center">
           <div
             ref={socialsRef}
             className="flex justify-center items-center gap-8 mb-6"
@@ -147,8 +149,22 @@ const ContactSection = () => {
             </a>
           </div>
 
+          <div className="mb-6">
+            <a
+              href="#"
+              className="inline-block transition-transform duration-300 hover:scale-105"
+              aria-label="Back to top"
+            >
+              <Image
+                src={nrgLogo}
+                alt="NRG Logo"
+                className="h-56 w-auto object-contain"
+              />
+            </a>
+          </div>
+
           <p className="text-xs font-mono text-primary/70 my-1">
-            Designed & Built with ⚡ by Emmanuel Omolaju (NRG)
+            Designed & Built with ⚡ by Emmanuel Omolaju
           </p>
           <p className="text-[11px] text-primary/50">
             Page design inspired by{" "}

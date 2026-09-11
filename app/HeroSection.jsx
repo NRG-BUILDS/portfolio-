@@ -156,7 +156,7 @@ export default function AirPodsSequence({
             </h2>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-3">
               <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full transition-all duration-150"
+                className="h-full bg-gradient-to-r from-light to-blue-600 rounded-full transition-all duration-150"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -200,7 +200,10 @@ export default function AirPodsSequence({
           }
           description={
             <>
-              Fullstack Developer and <span className="text-light">Interactive UI Specialist</span> crafting high-performance web and mobile experiences with speed and precision.
+              Fullstack Developer and{" "}
+              <span className="text-light">Interactive UI Specialist</span>{" "}
+              crafting high-performance web and mobile experiences with speed
+              and precision.
             </>
           }
         />
