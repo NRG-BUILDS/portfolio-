@@ -6,8 +6,8 @@ const SideBars = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      // 3500px matches the GSAP ScrollTrigger end offset in AirPodsSequence
-      setPastHero(window.scrollY >= 3500);
+      // 2400px matches the GSAP ScrollTrigger end offset in AirPodsSequence
+      setPastHero(window.scrollY >= 2400);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();

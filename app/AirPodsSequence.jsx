@@ -6,7 +6,9 @@ import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TOTAL_FRAMES = 180;
+const TOTAL_FRAMES = 120;
+// Offset: skip the first 60 frames — only play files 061–180
+const FRAME_OFFSET = 60;
 
 export default function AirPodsSequence({
   frameCount = TOTAL_FRAMES,
@@ -21,9 +23,9 @@ export default function AirPodsSequence({
   const [currentFrame, setCurrentFrame] = useState(1);
   const imagesRef = useRef([]);
 
-  // Helper: Generate image URL path
+  // Helper: Generate image URL path (offset so index 0 → file 061)
   const getFrameUrl = (index) => {
-    const padded = String(index + 1).padStart(3, "0");
+    const padded = String(index + FRAME_OFFSET + 1).padStart(3, "0");
     return `${folderPath}/${framePrefix}${padded}${extension}`;
   };
 
@@ -126,7 +128,7 @@ export default function AirPodsSequence({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=3500px",
+          end: "+=2400px",
           scrub: 0.6,
           pin: true,
           anticipatePin: 1,
@@ -182,7 +184,7 @@ export default function AirPodsSequence({
 
         {/* Floating Captions synchronized with current frame */}
         <CaptionCard
-          active={currentFrame >= 0 && currentFrame <= 50}
+          active={currentFrame >= 0 && currentFrame <= 33}
           topTag={
             <>
               <p className="text-light text-sm md:text-base mb-2">
@@ -206,7 +208,7 @@ export default function AirPodsSequence({
         />
 
         <CaptionCard
-          active={currentFrame >= 55 && currentFrame <= 95}
+          active={currentFrame >= 37 && currentFrame <= 63}
           title={
             <>
               I bring your ideas to <span className="colorWord">life</span>
@@ -216,13 +218,13 @@ export default function AirPodsSequence({
         />
 
         <CaptionCard
-          active={currentFrame >= 100 && currentFrame <= 140}
+          active={currentFrame >= 67 && currentFrame <= 93}
           title="Modern Tech Stack"
           description="Proficient in React, Next.js, Typescript, JavaScript (ES6+), NodeJS, Express, HTML5, CSS3, Tailwind, and scalable web architecture."
         />
 
         <CaptionCard
-          active={currentFrame >= 145 && currentFrame <= 178}
+          active={currentFrame >= 97 && currentFrame <= 118}
           title="Driven & Results-Oriented"
           description="Committed to delivering clean, maintainable code and bringing energy (NRG) to every project."
           cta={

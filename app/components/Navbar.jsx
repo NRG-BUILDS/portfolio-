@@ -9,8 +9,8 @@ const Navbar = () => {
   useEffect(() => {
     const onScroll = () => {
       // Hero section is one viewport-height tall (100vh)
-      // 3500px matches the GSAP ScrollTrigger end offset in AirPodsSequence
-      setPastHero(window.scrollY >= 3500);
+      // 2400px matches the GSAP ScrollTrigger end offset in AirPodsSequence
+      setPastHero(window.scrollY >= 2400);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll(); // run once on mount
