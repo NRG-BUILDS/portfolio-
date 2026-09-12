@@ -23,8 +23,8 @@ const experiences = [
   {
     role: "Frontend Developer (Lead)",
     company: "Greatsome Innovations I.T. Firm",
-    period: "Nov 2023 – Present",
-    type: "Leadership / Contract",
+    period: "Nov 2023 – Mar 2025",
+    type: "Full-Time",
     stack: ["React", "TypeScript", "REST APIs", "Tailwind CSS"],
     points: [
       "Led front-end development of administrator dashboards for financial institutional partners.",
@@ -100,7 +100,7 @@ const ExperienceSection = () => {
               end: "bottom 85%",
               scrub: 1,
             },
-          }
+          },
         );
       }
 
@@ -120,7 +120,7 @@ const ExperienceSection = () => {
               start: "top 85%",
               toggleActions: "play none none reverse",
             },
-          }
+          },
         );
       });
     }, sectionRef);
@@ -187,7 +187,9 @@ const ExperienceSection = () => {
               <ul className="space-y-2 my-4 text-sm text-primary/90 leading-relaxed">
                 {exp.points.map((pt, pIdx) => (
                   <li key={pIdx} className="flex items-start gap-2.5">
-                    <span className="text-light font-bold mt-1 text-xs">⚡</span>
+                    <span className="text-light font-bold mt-1 text-xs">
+                      ⚡
+                    </span>
                     <span>{pt}</span>
                   </li>
                 ))}
